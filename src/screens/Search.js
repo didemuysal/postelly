@@ -31,7 +31,7 @@ const SearchScreen = (props) => {
     useEffect(() => {
 
         getUserConfig().then((data) => {
-            setSelfUser(data.auth.username);
+            setSelfUser(data.auth.username); //get the user herself-himself
         });
 
         getUserFollowedData();
@@ -39,52 +39,52 @@ const SearchScreen = (props) => {
     }, []);
 
     const getUserFollowedData = () => {
-        getJsonFromStorage('user').then((data) => {
+        getJsonFromStorage('user').then((data) => { //get the user informations from storage with service call
             getUserFollowed(data.id).then((res) => {
-                let data = res.data.data;
-                setUserFollowed(data);
+                let data = res.data.data; //getting the data from API
+                setUserFollowed(data);  //change the state of the setUserFollowed state
             }).catch(err => console.log("Hata", err))
         });
     }
 
 
 
-
+  //even if the button pressed, this function checks for there is a vlue or not, if there is no value it alerts the user
     getSearchData = () => {
-        if (searchValue !== "") {
-            setSearchPressed(true);
+        if (searchValue !== "") {  //if the search value is not empty
+            setSearchPressed(true); //set the touchable opacity true
 
-            setShowUserSpinner(true);
+            setShowUserSpinner(true);  //display the spinner
             searchUser(searchValue).then((response) => {
-                let data = new Array(response.data.data);
-                let filteredData = data.filter((user) => user.username !== selfUser);
-                if (filteredData.length > 0) {
-                    setUserData(filteredData);
+                let data = new Array(response.data.data);  //assigning API responce to data variable
+                let filteredData = data.filter((user) => user.username !== selfUser);  //filter the array from the users himself-herself
+                if (filteredData.length > 0) { //is filtered array length is bigger than 0
+                    setUserData(filteredData); //set the user data state
                 } else {
-                    setUserData(null);
+                    setUserData(null); //list is empty- set user data null, nothing to list
                 }
-                setShowUserSpinner(false);
+                setShowUserSpinner(false); //search is done, no need for spinner
 
             }).catch((err) => {
-                setUserData(null);
+                setUserData(null);  //there is a problem so display nothing
                 console.log(err);
                 setShowUserSpinner(false);
             });
 
         } else {
-            Alert.alert("Uyarı", "Lütfen önce bir arama terimi giriniz.");
+            Alert.alert("Uyarı", "Lütfen önce bir arama terimi giriniz.");  //searchbar is empty, alert the user
         }
     }
 
 
-    const onFollowUser = (userId) => {
+    const onFollowUser = (userId) => { 
 
-        followUser(userId).then((res) => {
+        followUser(userId).then((res) => { //after prssing the button folloow the user - create the relationship with user-service.js to axios
             let data = res.data.data;
             console.log("Veri", data);
 
-            getUserFollowedData();
-            getSearchData();
+            getUserFollowedData();  //get the followed data again
+            getSearchData();  //get the search list again
 
         }).catch((err) => {
             console.log("Hata", err);
@@ -94,12 +94,12 @@ const SearchScreen = (props) => {
 
     const onUnFollowUser = (userId) => {
 
-        unFollowUser(userId).then((res) => {
+        unFollowUser(userId).then((res) => { //after prssing the button unfolloow the user - delete the relationship with user-service.js to axios
             let data = res.data.data;
             console.log("Veri", data);
 
-            getUserFollowedData();
-            getSearchData();
+            getUserFollowedData();  //get the followed data again
+            getSearchData();  //get the search list again
 
         }).catch((err) => {
             console.log("Hata", err);
@@ -108,19 +108,23 @@ const SearchScreen = (props) => {
 
     const renderUserItem = ({ item }) => (
 
+
+        // list the user informations such as username, firstname and lastname
         <Box flexDirection="row" alignItems="center" justifyContent="space-between">
             <RegularText style={{ flexWrap: 'wrap' }} fontSize={12}>
                 {item.username} - {item.firstName} {item.lastName}
             </RegularText>
             {
                 userFollowed.find((user) => user.id == item.id) ?
-                    <TouchableOpacity onPress={() => onUnFollowUser(item.id)}>
+                    <TouchableOpacity onPress={() => onUnFollowUser(item.id)}>  
+                    {/* With touchable opacity, unfollow the user */}
                         <RegularText color="blue" fontSize={12}>
                             Takibi Bırak
                 </RegularText>
                     </TouchableOpacity>
                     :
                     <TouchableOpacity onPress={() => onFollowUser(item.id)}>
+                         {/* With touchable opacity, follow the user */}
                         <RegularText color="blue" fontSize={12}>
                             Takip Et
                 </RegularText>
@@ -138,16 +142,16 @@ const SearchScreen = (props) => {
             <AppHeader />
             <Box flex={9}>
                 <Box mt={10} p={12} flexDirection="row" width="100%" justifyContent="space-between">
-
-                    <Box flex={1} p={2} bg="#e3e3e3" style={styles.searchContainer}>
+                    {/* search container */}
+                    <Box flex={1} p={2} bg="#e3e3e3" style={styles.searchContainer}>  
                         <MaterialIcons
                             name='search'
                             color='grey'
                             size={scale(30)}
                         />
                         <TextInput
-
-                            placeholder="Kullanıcı ya da gönderi ara"
+                        
+                            placeholder="Kullanıcı ara"
                             caretHidden={false}
                             style={[styles.inputStyle]}
                             placeholderTextColor="gray"
@@ -158,6 +162,7 @@ const SearchScreen = (props) => {
                         />
                     </Box>
 
+                    {/* search touchable opacity*/}
                     <TouchableOpacity style={{ borderRadius: 10, justifyContent: 'center', backgroundColor: '#fff', padding: 2, marginLeft: 10 }} onPress={getSearchData}>
                         <RegularText>
                             Ara
@@ -167,7 +172,7 @@ const SearchScreen = (props) => {
                 </Box>
 
                 {
-                    postData &&
+                    postData &&  //posts
                     <Box flex={1} bg="#d5d5d5" marginHorizontal={20} mt={10}>
                         <RegularText>
                             Gönderiler
@@ -182,7 +187,7 @@ const SearchScreen = (props) => {
                 }
 
                 {
-                    userData &&
+                    userData && //future wowk
                     <Box flex={1} bg="#d3d3d3" marginHorizontal={20} mt={20}>
                         <RegularText>
                             Kişiler
@@ -207,7 +212,7 @@ const SearchScreen = (props) => {
                 }
 
                 {
-                    (!Array.isArray(postData) && !Array.isArray(userData)) && searchPressed &&
+                    (!Array.isArray(postData) && !Array.isArray(userData)) && searchPressed &&  //input is empty, array is empty and button is not  pressed
                     <Box flex={1} alignItems="center" p={2}>
                         <RegularText>
                             Veri Bulunamadı!

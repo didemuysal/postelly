@@ -22,20 +22,20 @@ import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 import AppColors from '../helpers/Constants';
 //import {Translation} from 'react-i18next';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator();   //creating of bottom tab nav
 
 const HomeScreenRoutes = () => {
     return (
-        <Tab.Navigator
+        <Tab.Navigator   //in-app navigations created with bottom tab nav
             initialRouteName="MenuTab"
-            screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
+            screenOptions={({ route }) => ({    
+                tabBarIcon: ({ color, size }) => {
                     let iconName;
-                    if (route.name === 'HomeTab') {
+                    if (route.name === 'HomeTab') {     //default screen 
                         iconName = 'home';
-                    } else if (route.name === 'SearchTab') {
+                    } else if (route.name === 'SearchTab') {   //search screen
                         iconName = 'search';
-                    } else if (route.name === 'UserProfileTab') {
+                    } else if (route.name === 'UserProfileTab') {  // profile screen
                         iconName = 'user';
                     } else {
                         iconName = 'home';
@@ -45,6 +45,7 @@ const HomeScreenRoutes = () => {
                 },
             })}
 
+            // design of bottom tab bar
             tabBarOptions={{
                 activeTintColor: AppColors.primary,
                 inactiveTintColor: '#4f4f4f',
@@ -56,9 +57,9 @@ const HomeScreenRoutes = () => {
                 },
             }}>
 
-            <Tab.Screen
+            <Tab.Screen  
                 name="HomeTab"
-                component={MainFlowScreen}
+                component={MainFlowScreen}   //main flow screen
                 
                 options={{
                     title:"",
@@ -70,7 +71,7 @@ const HomeScreenRoutes = () => {
 
             <Tab.Screen
                 name="SearchTab"
-                component={SearchScreen}
+                component={SearchScreen}  //search screen
                 options={{
                     title:""
                 }}
@@ -78,7 +79,7 @@ const HomeScreenRoutes = () => {
 
             <Tab.Screen
                 name="UserProfileTab"
-                component={UserProfileScreen}
+                component={UserProfileScreen}   // user profile screen
                 options={{
                     title:""
                 }}

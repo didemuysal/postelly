@@ -10,15 +10,15 @@ import AppColors from '../helpers/Constants';
 const RegisterScreen = (props) => {
 
     const inputWidth = Dimensions.get('window').width * 0.9;
-    const [username, setUsername] = useState("");
+    const [username, setUsername] = useState("");   
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [password, setPassword] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
 
-    const register = () => {
-        let myArr = new Array(
+    const register = () => {  
+        let myArr = new Array( //assigning values to array
             username,
             firstName,
             lastName,
@@ -27,16 +27,16 @@ const RegisterScreen = (props) => {
             email);
 
 
-        let checkForInputs = myArr.every(d => d.length > 0);
+        let checkForInputs = myArr.every(d => d.length > 0);  //length check for the array - no null or emptiness - false => alert, true goes to if condition
         if (checkForInputs) {
-            saveUser(username, firstName, lastName, password, phone, email)
+            saveUser(username, firstName, lastName, password, phone, email) //saving user informations
                 .then((res) => {
-                    Alert.alert(
+                    Alert.alert( //pop-up alert for successfully registration
                         "Bilgilendirme",
                         "Üyelik Kaydınız Başarıyla Oluşturulmuştur",
                         [
                             {
-                                text: "OK", onPress: () => {
+                                text: "OK", onPress: () => {  //clearing the input boxes after succesful register with OK button
                                     setUsername("");
                                     setFirstName("");
                                     setLastName("");
@@ -44,18 +44,18 @@ const RegisterScreen = (props) => {
                                     setPhone("");
                                     setEmail("");
 
-                                    props.navigation.navigate('LoginScreen');
+                                    props.navigation.navigate('LoginScreen'); //navigation to Login Screen
                                 }
                             }
                         ]
                     );
 
                 }).catch(err => {
-                    Alert.alert("Uyarı", "Kullanıcı Kaydı Yapılamadı!");
+                    Alert.alert("Uyarı", "Kullanıcı Kaydı Yapılamadı!");  //error while registration
                     console.log(err);
                 })
         } else {
-            Alert.alert("Uyarı", "Bilgilerinizi Kontrol Ediniz");
+            Alert.alert("Uyarı", "Bilgilerinizi Kontrol Ediniz"); //missing or invald information - output false from checkForInputs 
         }
     }
 
@@ -64,10 +64,10 @@ const RegisterScreen = (props) => {
     return (
         <>
             <AppHeader showBottomBorder="true" />
-            <Box flex={7}>
+            <Box flex={7}> 
                 <Box mt={30} p={10} flexDirection="row" justifyContent='center' alignItems='center'>
                     <Feather name={"user"} size={30} color={AppColors.primary} />
-                    <MediumText>
+                    <MediumText> 
                         ÜYE OL
             </MediumText>
                 </Box>
@@ -75,9 +75,9 @@ const RegisterScreen = (props) => {
                 </Box>
 
                 <Box mt={30} alignItems="center" flex={1}>
-                    <TextInput
+                    <TextInput                                          //username input box
                         autoCapitalize="none"
-                        onChangeText={((text) => setUsername(text))}
+                        onChangeText={((text) => setUsername(text))}    //updating username text visually on the screen with state
                         value={username}
                         placeholder="Kullanıcı Adı"
                         placeholderTextColor='black'
@@ -94,9 +94,9 @@ const RegisterScreen = (props) => {
                         }}
                     />
 
-                    <TextInput
+                    <TextInput                                            // first name input box
                         autoCapitalize="none"
-                        onChangeText={((text) => setFirstName(text))}
+                        onChangeText={((text) => setFirstName(text))}    //updating first name text visually on the screen with state
                         value={firstName}
                         placeholder="Ad"
                         keyboardType="default"
@@ -114,9 +114,9 @@ const RegisterScreen = (props) => {
                         }}
                     />
 
-                    <TextInput
+                    <TextInput                                               //last name input box
                         autoCapitalize="none"
-                        onChangeText={((text) => setLastName(text))}
+                        onChangeText={((text) => setLastName(text))}         //updating last name text visually on the screen  with state
                         value={lastName}
                         placeholder="Soyad"
                         keyboardType="default"
@@ -133,11 +133,11 @@ const RegisterScreen = (props) => {
                             backgroundColor: AppColors.input
                         }}
                     />
-                    <TextInput
-                        autoCapitalize="none"
-                        onChangeText={((text) => setPassword(text))}
+                    <TextInput                                              //password input box
+                        autoCapitalize="none" 
+                        onChangeText={((text) => setPassword(text))}       //updating password text visually on the screen with state
                         value={password}
-                        secureTextEntry={true}
+                        secureTextEntry={true}                             //text visuality is hid with * character
                         placeholder="Şifre"
                         placeholderTextColor='black'
                         style={{
@@ -153,13 +153,14 @@ const RegisterScreen = (props) => {
                         }}
                     />
 
-                    <RegularText style={{flex:1, left:-30}} fontSize="12">
+                    {/* password length check */}
+                    <RegularText style={{flex:1, left:-30}} fontSize="12">   
                         * Mininum 6 karakter içermelidir.
                     </RegularText>
 
-                    <TextInput
+                    <TextInput                                            //mobile phone input box
                         autoCapitalize="none"
-                        onChangeText={((text) => setPhone(text))}
+                        onChangeText={((text) => setPhone(text))}        //updating mobile phone number visually on the screen with state
                         value={phone}
                         placeholder="Cep Telefonu"
                         keyboardType="phone-pad"
@@ -176,10 +177,10 @@ const RegisterScreen = (props) => {
                             backgroundColor: AppColors.input
                         }}
                     />
-                    <TextInput
+                    <TextInput                                          // email input box
                         autoCapitalize="none"
-                        onChangeText={((text) => setEmail(text))}
-                        value={email}
+                        onChangeText={((text) => setEmail(text))}       //updating email text visually on the screen with state
+                        value={email}                                  
                         placeholder="Email"
                         keyboardType="email-address"
                         placeholderTextColor='black'
@@ -196,8 +197,8 @@ const RegisterScreen = (props) => {
                         }}
                     />
 
-
-                    <Box flex={1} justifyContent="flex-end" p={20} flexDirection="row" width="100%" >
+                    {/* register button */}
+                    <Box flex={1} justifyContent="flex-end" p={20} flexDirection="row" width="100%" >   
                         <TouchableOpacity onPress={() => register()}
                             style={{
                                 backgroundColor: AppColors.button,
@@ -218,6 +219,7 @@ const RegisterScreen = (props) => {
                         <RegularText>
                             Üye misin?
                         </RegularText>
+                        {/* Touchable button for navigation to Login Screen */}
                         <TouchableOpacity onPress={() => props.navigation.navigate("LoginScreen")}
                             style={{
                                 width: "30%",

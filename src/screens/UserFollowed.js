@@ -10,16 +10,18 @@ import { getUserFollowed, getUserFollowers, unFollowUser } from '../services/use
 
 const UserFollowedScreen = (props) => {
 
-    const [userFollowed, setUserFollowed] = useState([]);
+    const [userFollowed, setUserFollowed] = useState([]);  //user followed state
 
-    const [showSpinner, setShowSpinner] = useState(false);
+    const [showSpinner, setShowSpinner] = useState(false);  //spinner display state
 
-    const getUserFollowedData = () => {
-        getJsonFromStorage('user').then((data) => {
+    const getUserFollowedData = () => { 
+        getJsonFromStorage('user').then((data) => {  //get the user informations from storage with service call
             getUserFollowed(data.id).then((res) => {
-                let data = res.data.data;
-                setUserFollowed(data);
-                setShowSpinner(false);
+                let data = res.data.data; //getting the data from API
+
+                
+                setUserFollowed(data);  //change the state of the setUserFollowed state
+                setShowSpinner(false);  //dont display spinner
 
             }).catch(err => console.log("Hata", err))
         });
@@ -34,13 +36,12 @@ const UserFollowedScreen = (props) => {
 
 
 
-
     const onUnfollowUser = (user) => {
 
-        Alert.alert(
+        Alert.alert(  //displaying the alert 
             "Uyarı",
             ` Kullanıcıyı Takipten Çıkmak İstediğinizden Emin Misiniz? 
-             ${user.username}` ,
+             ${user.username}` ,  //username of the soon-about-to-be unfollowed user
             [
                 {
                     text: "İptal",
@@ -48,9 +49,9 @@ const UserFollowedScreen = (props) => {
                 },
                 {
                     text: "Onayla", onPress: () => {
-                        unFollowUser(user.id).then((res) => {
+                        unFollowUser(user.id).then((res) => {// after prssing the button unfolloow the user - delete the relationship from user-service.js
                             console.log("Sonuç", res);
-                            getUserFollowedData();
+                            getUserFollowedData(); //get the data again
 
                         }).catch((err) => {
                             console.log("Hata", err);
@@ -58,7 +59,7 @@ const UserFollowedScreen = (props) => {
                     }
                 },
             ],
-            { cancelable: false },
+            { cancelable: false },  //when clicking somewhere in the screen, dialog does not close
         );
 
 
@@ -69,28 +70,30 @@ const UserFollowedScreen = (props) => {
 
     const renderUserItem = ({ item }) => (
         <Box p={10} flex={1} flexDirection="row" alignItems="center" justifyContent="space-around">
-            <Image
+            <Image  //user profile picture
                 resizeMode="contain"
                 style={{
                     alignSelf: "flex-start",
                     width: '20%',
                     height: '130%'
                 }}
-                source={item.imageUrl ? { uri: item.imageUrl } : require('../../assets/profilePlaceholder.png')}
+                source={item.imageUrl ? { uri: item.imageUrl } : require('../../assets/profilePlaceholder.png')} //if there is no user profile picture then  default user icon
             />
 
             <Box flexWrap="wrap" flex={1}>
                 <RegularText fontSize="14">
-                    {item.firstName} {item.lastName}
+                    {/* user name and last name */}
+                    {item.firstName} {item.lastName}  
                 </RegularText>
 
                 <RegularText fontSize="10" color="gray">
+                    {/* user titlen anme */}
                     {item.username}
                 </RegularText>
             </Box>
 
-
-            <TouchableOpacity onPress={() => onUnfollowUser(item)}>
+                {/* unfollow icon */}
+            <TouchableOpacity onPress={() => onUnfollowUser(item)}>   
                 <RegularText style={{ right: -5 }} color="blue" fontSize="12">
                     Takibi Bırak
                 </RegularText>
@@ -102,11 +105,12 @@ const UserFollowedScreen = (props) => {
     return (
         showSpinner ?
 
-            <ActivityIndicator color="blue" />
+        
+            <ActivityIndicator color="blue" />  //while followed user loading 
 
             :
 
-            <FlatList
+            <FlatList    //displaying of followed user
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 100 }}

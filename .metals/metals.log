@@ -1,0 +1,5 @@
+[0m2021.06.15 17:07:56 INFO  Started: Metals version 0.10.4 in workspace 'D:\SocialMediaApp\sound-social-media-mobile-master' for client Visual Studio Code 1.57.0.[0m
+[0m2021.06.15 17:08:01 INFO  time: initialize in 5.51s[0m
+[0m2021.06.15 17:08:01 WARN  Build server is not auto-connectable.[0m
+[0m2021.06.15 17:08:01 WARN  no build tool detected in workspace 'D:\SocialMediaApp\sound-social-media-mobile-master'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. [0m
+[0m2021.06.15 19:49:04 INFO  shutting down Metals[0m

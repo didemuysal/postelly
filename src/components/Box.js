@@ -1,6 +1,6 @@
 
 import { View } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components';  //components created with styled components
 
 import {
    
@@ -13,6 +13,7 @@ import {
     borderRadius
 } from 'styled-system';
 
+//props for Box component
 const Box = styled(View)(
     compose(
         flexbox,

@@ -1,5 +1,4 @@
-import logoImage from '../../assets/app-logo.png';
-
+import logoImage from '../../assets/app-logo.png'; 
 import Box from './Box';
 import { Image } from 'react-native';
 import { BoldText, MediumText, RegularText } from './CustomText';
@@ -8,12 +7,12 @@ import { StyleSheet } from 'react-native';
 
 
 const AppHeader = (props) => {
-    const imageUri = Image.resolveAssetSource(logoImage).uri;
+    const imageUri = Image.resolveAssetSource(logoImage).uri;  //app logo importing and assigning to imageUri
     const { style, ...rest } = props;
 
 
-    let myStyle = (props.showBottomBorder) ? {
-        ...style,
+    let myStyle = (props.showBottomBorder) ? {   //additional styling
+        ...style,  
         borderBottomWidth: 0
     } : style
 

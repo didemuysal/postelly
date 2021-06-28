@@ -4,9 +4,9 @@ import { getUserConfig, removeValue } from "../helpers/StorageHelper";
 import {baseUrl } from '../helpers/Constants';
 
  /* Do not use axiosInstance in here and directly pass variables */
-const login = async(username, password) => {
+const login = async(username, password) => { //login operations 
     
-    return axios.post(baseUrl + '/auth/login', {},
+    return axios.post(baseUrl + '/auth/login', {},   //login authentication with axios - before login, auth needed 
         {
             auth: {
                 username: username,
@@ -15,7 +15,7 @@ const login = async(username, password) => {
         }
     )
 }
-const logoutUser = async () => {
+const logoutUser = async () => {   // logout operations with axios Instance
     let config = await getUserConfig();
     return axiosInstance.post('/auth/logout')
 }

@@ -29,7 +29,7 @@ import AudioRecorderPlayer, {
     AVEncodingOption
 } from 'react-native-audio-recorder-player';
 
-import { ProgressBar, FAB } from 'react-native-paper';
+import { ProgressBar, FAB } from 'react-native-paper';  
 import Feather from 'react-native-vector-icons/Feather';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Modal from 'react-native-modal';
@@ -37,13 +37,13 @@ import FlowItem from '../components/FlowItem';
 import Sound from 'react-native-sound';
 
 
-const path = Platform.select({
-    ios: 'hello.aac',
-    android: 'sdcard/hello.aac',
+const path = Platform.select({   //platfrom comes as a RN feature
+    ios: 'hello.aac',               //path for iOS
+    android: 'sdcard/hello.aac',    //path for Android - cache
 });
 
 const audioSet = {
-    AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
+    AudioEncoderAndroid: AudioEncoderAndroidType.AAC,  //AAC formatting for both platfroms
     AudioSourceAndroid: AudioSourceAndroidType.MIC,
     AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.medium,
     AVNumberOfChannelsKeyIOS: 2,
@@ -51,36 +51,36 @@ const audioSet = {
 };
 
 
-const audioRecorderPlayer = new AudioRecorderPlayer();
+const audioRecorderPlayer = new AudioRecorderPlayer();  // one instance for all app - not rerender everytime
 
 const MainFlowScreen = (props) => {
 
 
-    const [text, setText] = useState("");
-    const [soundPath, setSoundPath] = useState("");
+    const [text, setText] = useState(""); //text state
+    const [soundPath, setSoundPath] = useState("");  //sound path state
 
-    const [showSpinner, setShowSpinner] = useState(false);
-    const [isModalVisible, setModalVisible] = useState(false);
-    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+    const [showSpinner, setShowSpinner] = useState(false);   //loading icon state
+    const [isModalVisible, setModalVisible] = useState(false); //modal visibility
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false); // keyboard visibility state
 
 
-    const [isSoundPlaying, setSoundPlaying] = useState(false);
-    const [isSoundRecorded, setSoundRecorded] = useState(false);
-    const [isSoundRecording, setSoundRecording] = useState(false);
+    const [isSoundPlaying, setSoundPlaying] = useState(false);  //sound playing state - icon change
+    const [isSoundRecorded, setSoundRecorded] = useState(false);  // sound recorded state - gif change
+    const [isSoundRecording, setSoundRecording] = useState(false);  //sound recording state - icon change
 
-    const [playedTime, setPlayedTime] = useState(null);
-    const [imageObject, setImageObject] = useState(null);
-    const [mainFlowData, setMainFlowData] = useState(null);
+    const [playedTime, setPlayedTime] = useState(null);   //sound played time state 
+    const [imageObject, setImageObject] = useState(null);  // image object state
+    const [mainFlowData, setMainFlowData] = useState(null);  // main flow data state while logging in
 
 
     const [soundDuration, setSoundDuration] = useState(null);
-    const [currentPosition, setCurrentPosition] = useState(null);
+    const [currentPosition, setCurrentPosition] = useState(null);  // current position of the audio state
 
     const [myTrack, setTrack] = useState(null);
-    const [refreshing, setRefreshing] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);  //refreshing of the main flow state
 
 
-    const clearPost = () => {
+    const clearPost = () => {  //cleaning of the post after sending the post succesfully
 
         setText("");
         setSoundPath("");
@@ -102,20 +102,21 @@ const MainFlowScreen = (props) => {
 
     const OS = Platform.OS;
 
-    const inputRef = useRef(null);
+    const inputRef = useRef(null); //after opening modal, it will focus on text input directly
 
-    const toggleModal = () => {
+    const toggleModal = () => {   //opening and closing the modal due to its state
         setModalVisible(!isModalVisible);
 
-        if (isModalVisible) {
-            clearPost();
+        if (isModalVisible) { //while closing the modal, post also cleans
+            clearPost();  
         }
     };
 
     useEffect(() => {
 
-        getMainFlowData();
+        getMainFlowData();  // loading the main flow
 
+    //in order to not to go back with keyboard - go back means Indicator Screen 
         const keyboardDidShowListener = Keyboard.addListener(
             'keyboardDidShow',
             () => {
@@ -136,27 +137,27 @@ const MainFlowScreen = (props) => {
     }, []);
 
 
-    const getMainFlowData = () => {
-        setShowSpinner(true);
+    const getMainFlowData = () => {  //when component first loads
+        setShowSpinner(true); //while loading the flow, a spinner spins in screen
         
-        getMainFlow().then((res) => {
-            setShowSpinner(false);
-            let data = res.data.data;
-            setMainFlowData(res.data.data);
+        getMainFlow().then((res) => { 
+            setShowSpinner(false);  //spiners disappear
+            let data = res.data.data; //getting the date from API
+            setMainFlowData(res.data.data); //changing the setMainFlow state
 
         }).catch(err => {
-            setShowSpinner(false);
+            setShowSpinner(false);  //spinner disappears
             console.log("Veriler Çekilemedi", err);
         })
     }
 
 
-    const refreshData = () => {
-        setRefreshing(true);
+    const refreshData = () => {  
+        setRefreshing(true);  // rn has its own spiiner for refreshing - loading icon spins in the screen with Flatlist
         getMainFlow().then((res) => {
-            setRefreshing(false);
-            let data = res.data.data;
-            setMainFlowData(res.data.data);
+            setRefreshing(false); 
+            let data = res.data.data;  //getting the data from API  
+            setMainFlowData(res.data.data); //changing the setMainFlow state
             
         }).catch(err => {
             setShowSpinner(false);
@@ -168,22 +169,22 @@ const MainFlowScreen = (props) => {
 
 
 
-    const createPost = () => {
+    const createPost = () => {  
 
-        const body = new FormData();
+        const body = new FormData();  //for multiple type of data body image,text and sound for HTTP 
 
         let soundFile = {
-            uri: soundPath,
+            uri: soundPath, 
             name: 'itssoundname',
             type: "audio/aac"
         }
 
 
-        if (soundPath !== "") {
+        if (soundPath !== "") {  //if the soundPath is not empty, save it to HTTP body
             body.append('sound', soundFile);
         }
 
-        if (imageObject?.uri) {
+        if (imageObject?.uri) {  //if imageObject is not null, save it to HTTP body
             let imageFile = {
                 uri: imageObject.uri,
                 name: 'itsimagename',
@@ -194,18 +195,18 @@ const MainFlowScreen = (props) => {
         }
 
         if (text) {
-            body.append('text', text);
+            body.append('text', text);  // if there is a text, save it to HTTP body
         }
 
         return body;
 
     }
 
-    const runAfterSendProcedures = () => {
-        setModalVisible(false);
+    const runAfterSendProcedures = () => {  //after sending the post successfully
+        setModalVisible(false);  //modal closes
         Alert.alert("Bilgi", "Gönderi başarıyla gönderildi!");
-        clearPost();
-        getMainFlow().then((res) => {
+        clearPost();  //post cleans 
+        getMainFlow().then((res) => {  //main flow refreshes
             let data = res.data.data;
             setMainFlowData(res.data.data);
             
@@ -215,14 +216,14 @@ const MainFlowScreen = (props) => {
 
 
 
-    const sendPost = async () => {
-        let body = createPost();
-        if (body._parts.length == 0) {
+    const sendPost = async () => { 
+        let body = createPost();  //body is created
+        if (body._parts.length == 0) {  // if the body is empty, then there is no image, sound or text in the post
             Alert.alert("Uyarı", "Lütfen bir yazı, ses ya da görsel paylaşınız!")
         } else {
-            savePost(body)
+            savePost(body)  //save the post
                 .then(data => {
-                    runAfterSendProcedures();
+                    runAfterSendProcedures(); //cleans the post, refreshes the main flow, closes the modal
                 })
                 .catch(err => {
                     console.log("Hata", err);
@@ -237,41 +238,38 @@ const MainFlowScreen = (props) => {
 
 
 
-    onRecordStart = async () => {
+    onRecordStart = async () => {  //startRecording  
 
-        const result = await audioRecorderPlayer.startRecorder(path, audioSet);
+        const result = await audioRecorderPlayer.startRecorder(path, audioSet); //audioRecorderPplayer works with startRecorder func, needs for path and audio settings
         console.log("START Recording", result);
 
-        setSoundPath(result);
+        setSoundPath(result); //saves and gives path to the setSoundPath state - icon changes
 
-        setPlayedTime(0);
+        setPlayedTime(0);  //progressbar becomes empty
 
 
         audioRecorderPlayer.addRecordBackListener((e) => {
             //Here we can set the duration by every second, on the last time of record we achieve duration.
 
-            let myCurrent = audioRecorderPlayer.mmssss(
-                Math.floor(e.current_position),
-            );
-
+        
             return;
         });
     }
 
 
     onRecordStop = async () => {
-        const result = await audioRecorderPlayer.stopRecorder();
+        const result = await audioRecorderPlayer.stopRecorder(); //recording stops - icon changes
 
         console.log("STOP Recording", result);
-        audioRecorderPlayer.removeRecordBackListener();
+        audioRecorderPlayer.removeRecordBackListener(); //listener removes
 
-        setSoundRecorded(true);
-        setSoundRecording(false);
+        setSoundRecorded(true);  //sound is recorded - icon changes
+        setSoundRecording(false); //sound recording is finished 
 
 
     }
 
-    function format(time) {
+    function format(time) { //thanks to library, it show the last recording length
         // Hours, minutes and seconds
         var hrs = ~~(time / 3600);
         var mins = ~~((time % 3600) / 60);
@@ -287,41 +285,40 @@ const MainFlowScreen = (props) => {
         return ret;
     }
 
-    playSound = () => {
+    playSound = () => {     // 
 
-        let soundPath = Platform.select({
+        let soundPath = Platform.select({  // the sound files where in the OS
             android: "/" + path,
             ios: path
         });
 
 
-        let basePath = Platform.select({
+        let basePath = Platform.select({   //the location saves in the OS
             android: '',
             ios: Sound.CACHES
         });
 
 
 
-        let myInterval = setInterval(() => {
+        let myInterval = setInterval(() => { // runs every 250 milisecond to update the progress bar with thick function - rn only gives finish info
             tick();
         }, 250)
 
 
-        setSoundPlaying(true);
-        setPlayedTime(0);
+        setSoundPlaying(true); //play the sound
+        setPlayedTime(0);  //progress bar is 0
 
-        const track = new Sound(soundPath, basePath, (e) => {
+        const track = new Sound(soundPath, basePath, (e) => {   //plays the audio to the world
             if (e) {
                 console.log('error loading track:', e)
             } else {
-                console.log('girdi', audioRecorderPlayer.mmssss(track.getDuration() * 1000));
-                setSoundDuration(format(track.getDuration()));
+                setSoundDuration(format(track.getDuration())); // get the 
 
-                track.play((success) => {
+                track.play((success) => {  //sound playing finished 
                     if (success) {
-                        setSoundPlaying(false);
-                        clearInterval(myInterval);
-                        setPlayedTime(1);
+                        setSoundPlaying(false);  //sound playing state becomes false -  sound is finished
+                        clearInterval(myInterval); //interval cleans
+                        setPlayedTime(1); //progress bar fully orange
                         console.log("Oynatma Tamamlandı");
                     } else {
                         clearInterval(myInterval);
@@ -333,7 +330,7 @@ const MainFlowScreen = (props) => {
 
         setTrack(track);
 
-        function tick() {
+        function tick() { //progress bar updates for every 0.25 seconds - calculates the percentages 
 
             track.getCurrentTime((seconds) => {
                 if (myInterval) {
@@ -349,62 +346,15 @@ const MainFlowScreen = (props) => {
             });
         }
 
-        /* 
-                 try {
-                    audioRecorderPlayer.startPlayer(path).then((data) => {
-                        console.log("Playing Sound", data);
-                    }).catch((err) => {
-                        console.warn("Oynatma Hatası", err);
-                    });
-            
-                    audioRecorderPlayer.setVolume(1.0);
-            
-            
-                    audioRecorderPlayer.addPlayBackListener((e) => {
-                        let duration = e.duration;
-            
-                        // Recorded duration and 
-                        let currentPosition = e.current_position;
-            
-            
-                        let durationLeft = audioRecorderPlayer.mmssss(
-                            Math.floor(duration - currentPosition),
-                        );
-            
-                        setCurrentPosition(durationLeft);
-            
-                        let playedSoundTime = Math.floor((100 * Math.floor(currentPosition)) / Math.floor(duration));
-                        setPlayedTime(playedSoundTime);
-            
-                        if (e.current_position == e.duration) {
-                            console.log("Oynatma Durduruldu");
-                            audioRecorderPlayer.removePlayBackListener();
-            
-                            setSoundPlaying(false);
-                            setPlayedTime(0);
-                            stopSound();
-            
-                            setCurrentPosition(audioRecorderPlayer.mmssss(
-                                Math.floor(duration),
-                            ));
-            
-            
-                        }
-                        return;
-                    });    
-                } catch (error) {
-                    console.log("Hata",error);
-                }  */
-
 
 
     }
 
-    stopSound = async () => {
+    stopSound = async () => { //stop sound 
         try {
-            myTrack.stop();
-            setCurrentPosition(0);
-            setPlayedTime(0);
+            myTrack.stop();  //stop the playin audio
+            setCurrentPosition(0);  // set progress bar to 0 
+            setPlayedTime(0);  //set the played time state to 0
         } catch (error) {
             console.warn("Durdurma hatası 2", error);
         }
@@ -418,25 +368,26 @@ const MainFlowScreen = (props) => {
     return (
         <Box flex={1}>
 
-            <AppHeader />
+            {/* app header */}
+            <AppHeader />  
 
             <Box flex={9}>
 
 
                 <Box flex={8}  >
                     {
-                        showSpinner ?
+                        showSpinner ? //show spinner
                             <Box flex={1} justifyContent="center" alignItems="center">
                                 <ActivityIndicator color="blue" />
                             </Box>
 
                             :
 
-                            (mainFlowData?.posts) ?
-                                <FlatList
-                                    refreshing={refreshing}
-                                    onRefresh={refreshData}
-                                    showsVerticalScrollIndicator={false}
+                            (mainFlowData?.posts) ?  
+                                <FlatList  //if there are main flow
+                                    refreshing={refreshing} //refreshing function works
+                                    onRefresh={refreshData}  //refresh data state changes
+                                    showsVerticalScrollIndicator={false} //spinner needs to set false otherwise spins to infinity
                                     showsHorizontalScrollIndicator={false}
                                     contentContainerStyle={{ paddingBottom: 100 }}
                                     data={mainFlowData.posts}
@@ -444,8 +395,9 @@ const MainFlowScreen = (props) => {
                                     keyExtractor={item => item.id}
                                 />
                                 :
-                                <Box alignItems="center" flex={1} justifyContent="center">
-                                    <RegularText>
+                                //if there is no main flow
+                                <Box alignItems="center" flex={1} justifyContent="center"> 
+                                    <RegularText>  
                                         Veri Bulunamadı!
                                 </RegularText>
                                 </Box>
@@ -453,12 +405,12 @@ const MainFlowScreen = (props) => {
                 </Box>
 
                 {
-                    !isModalVisible &&
+                    !isModalVisible &&  //if modal IS NOT visible 
                     <FAB
-                        style={styles.fab}
-                        medium
-                        icon="plus"
-                        onPress={toggleModal}
+                        style={styles.fab}   //modal button for creating post - Floating Action Button
+                        medium  //medium size 
+                        icon="plus" //icon
+                        onPress={toggleModal}  //opens modal - toggleModal function works
                     />
                 }
 
@@ -471,65 +423,73 @@ const MainFlowScreen = (props) => {
 
 
             <Modal
-                onBackdropPress={() => setKeyboardVisible(false)}
-                avoidKeyboard={true}
+                onBackdropPress={() => setKeyboardVisible(false)}  //no default backdrop -  custom backdrop created
+                avoidKeyboard={true}  //no keyboard from library
                 onModalShow={() => inputRef.current.focus()}
-                coverScreen={false}
+                coverScreen={false} //screen customized, no dafault
                 swipeDirection="down"
                 key={"chartModal"}
-                isVisible={isModalVisible}
+                isVisible={isModalVisible} //modal is visbile
                 hasBackdrop={true}
                 backdropOpacity={1}
-                customBackdrop={
-                    <View style={OS == "ios" ? {
+                customBackdrop={ 
+                    <View style={OS == "ios" ? {  //for iOS 
                         height: '100%',
                         backgroundColor: AppColors.background,
                     } :
                         {
-                            backgroundColor: '#fff',
+                            backgroundColor: '#fff', //for Android
                             width: Dimensions.get('screen').height,
                             height: Dimensions.get('screen').height
                         }
                     } />
                 }
             >
-                <Box flex={1} >
+                <Box flex={1} > 
 
-                    <Box flexDirection="row" justifyContent="space-between">
+                    {/* icons for closing the modal and creating new post */}
+                    <Box flexDirection="row" justifyContent="space-between">  
 
-                        <TouchableOpacity onPress={() => toggleModal()}>
-                            <Feather name="x" size={30} color={'black'} />
+                        {/* closing the modal */}
+                        <TouchableOpacity onPress={() => toggleModal()}> 
+                            <Feather name="x" size={30} color={'black'} />  
                         </TouchableOpacity>
 
+                         {/* posting a nre post */}
                         <TouchableOpacity onPress={sendPost}>
                             <Feather name="send" size={30} color={AppColors.button} />
                         </TouchableOpacity>
 
                     </Box>
 
-                    <Box height={isKeyboardVisible ? "55%" : "90%"}>
+                    <Box height={isKeyboardVisible ? "55%" : "90%"}> 
+                    {/* if the keyboard is visible the screen will be 55% percent big and mic and camera icons moves to up , if not screen size is 90% */}
 
                         <Box flex={1} >
+
+                            {/* Text area  */}
                             <TextInput
-                                allowFontScaling={true}
+                                allowFontScaling={true}// scaling diffrent screen size
                                 textAlignVertical="top"
                                 padding={20}
                                 ref={inputRef}
                                 style={{ fontFamily: "LexendTera-Regular", backgroundColor: "rgba(255, 228, 196,0.4)", height: "90%", borderRadius: 20 }}
                                 multiline={true}
-                                value={text}
-                                onChangeText={setText}
+                                value={text} //gets the text value
+                                onChangeText={setText} //changes the state of the text and displays on the screen
                             />
                         </Box>
 
                         {
-                            imageObject &&
-                            <Box flex={0.25} p={3} flexDirection="row" alignItems="center" justifyContent="space-between">
+                            imageObject &&  //if there is an image object
+                            <Box flex={0.25} p={3} flexDirection="row" alignItems="center" justifyContent="space-between"> 
+                             {/* //displays */}
                                 <Image
                                     style={{ width: '30%', height: '100%', borderRadius: 10 }}
-                                    source={{ uri: imageObject.uri }}
+                                    source={{ uri: imageObject.uri }} //
                                 />
-                                <TouchableOpacity onPress={() => setImageObject(null)} >
+                                <TouchableOpacity onPress={() => setImageObject(null)} > 
+                                 {/* delete the image, set the state to null */}
                                     <Feather name="x" size={30} color={AppColors.primary} />
                                 </TouchableOpacity>
                             </Box>
@@ -537,28 +497,30 @@ const MainFlowScreen = (props) => {
 
                         <Box flexDirection="row">
                             {
-                                isSoundRecorded ?
+                                isSoundRecorded ?   //is there is an sound
                                     <Box flex={1}>
                                         <Box width="100%" justifyContent="center" flexDirection="row">
                                             {
-                                                !isSoundPlaying ?
-                                                    <TouchableOpacity onPress={() => {
-                                                        playSound();
-                                                        setSoundPlaying(true);
+                                                !isSoundPlaying ?  //if sound is not playing
+                                                    <TouchableOpacity onPress={() => { //when play button is pressed
+                                                        playSound();  //play the sound with track func
+                                                        setSoundPlaying(true); 
                                                     }}>
-                                                        <Feather name="play" size={30} color={AppColors.primary} />
+                                                        {/* display play button */}
+                                                        <Feather name="play" size={30} color={AppColors.primary} /> 
                                                     </TouchableOpacity>
                                                     :
-                                                    <TouchableOpacity onPress={() => {
-                                                        stopSound();
-                                                        setSoundPlaying(false);
+                                                    <TouchableOpacity onPress={() => { //if the sound is playing and pressed pause button
+                                                        stopSound();  //stop the sound and change the icon to play
+                                                        setSoundPlaying(false); //change the state 
                                                     }}>
+                                                        {/* display pouse button */}
                                                         <Feather name="pause" size={30} color={AppColors.primary} />
                                                     </TouchableOpacity>
                                             }
 
 
-
+                                            {/* displaying of progress bar */}
                                             <Box flex={1} justifyContent="center" alignItems="center">
                                                 <Box width="100%">
                                                     <ProgressBar
@@ -570,29 +532,31 @@ const MainFlowScreen = (props) => {
                                             </Box>
 
 
-
+                                            {/* deleting the audio */}
                                             <TouchableOpacity onPress={() => {
-                                                clearSound()
+                                                clearSound()  //deleting the sound
                                             }}>
-                                                <Feather name="x" size={30} color={AppColors.primary} />
+                                                {/* putting the icon X for deleting */}
+                                                <Feather name="x" size={30} color={AppColors.primary} /> 
                                             </TouchableOpacity>
                                         </Box>
-
+                                            
+                                            {/* displaying the length of the audio */}
                                         <Box alignItems="center" justifyContent="center">
                                             <RegularText fontSize="12">
-                                                {currentPosition}
+                                                {currentPosition} 
                                             </RegularText>
                                         </Box>
 
                                     </Box>
 
                                     :
-                                    isSoundRecording &&
+                                    isSoundRecording && //while recording the sound 
 
                                     <Box flex={1} alignItems="center" justifyContent="center">
                                         <Image
                                             style={{ width: 100, height: 100, borderRadius: 0 }}
-                                            source={require('../../assets/recording.gif')}
+                                            source={require('../../assets/recording.gif')} //display loading gif
                                         />
                                     </Box>
                             }
@@ -623,32 +587,32 @@ const MainFlowScreen = (props) => {
                             {
                                 isSoundRecording ?
 
-                                    <TouchableHighlight
+                                    <TouchableHighlight   //while recording a sound
                                         activeOpacity={0.6}
                                         underlayColor="rgba(255, 228, 196, 0.2)"
                                         style={styles.attachButtonStyle}
 
                                         onPress={() => {
-                                            onRecordStop();
-                                            setSoundRecording(false);
+                                            onRecordStop();  //sound recording stops
+                                            setSoundRecording(false);  //sound recording state changes
                                         }}>
-
-                                        <Feather name="square" size={30} color={AppColors.primary} />
+                                            {/* mic icon becomes square icon  */}
+                                        <Feather name="square" size={30} color={AppColors.primary} /> 
                                     </TouchableHighlight>
 
 
                                     :
-                                    <TouchableHighlight
+                                    <TouchableHighlight  //while NOT recording a sound
                                         activeOpacity={0.6}
                                         underlayColor="rgba(255, 228, 196, 0.2)"
                                         style={styles.attachButtonStyle}
-                                        onPress={() => {
-                                            onRecordStart()
-                                            setSoundRecorded(false);
-                                            setSoundRecording(true);
+                                        onPress={() => { //when microphone button pressed
+                                            onRecordStart()   //starting to record
+                                            setSoundRecorded(false);  //set the sound recorded state false 
+                                            setSoundRecording(true);  //set sound recording state true
                                         }}
                                     >
-
+                                        {/* square icon becomes mic icon again */}
                                         <Feather name="mic" size={30} color={AppColors.primary} />
                                     </TouchableHighlight>
                             }

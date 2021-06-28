@@ -1,3 +1,4 @@
+//navigation moved to the nav folder
 import * as React from 'react';
 
 export const navigationRef = React.createRef();

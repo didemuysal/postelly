@@ -35,17 +35,17 @@ const UserProfileScreen = (props) => {
     const [profileImage, setProfileImage] = useState(null);
 
 
-    const refreshData = () => {
-        setRefreshing(true);
-        setUserSpinnerShow(true);
+    const refreshData = () => {  //user flow comes from API
+        setRefreshing(true); //while refreshing
+        setUserSpinnerShow(true); //spinners spins
         getUserFlow().then((res) => {
-            let data = res.data.data;
+            let data = res.data.data;  //data comes and assigns
 
             console.log(data);
 
-            setRefreshing(false);
-            setUserSpinnerShow(false);
-            setUserFlowData(data);
+            setRefreshing(false); //refreshing cancelled
+            setUserSpinnerShow(false); //spinner disappers
+            setUserFlowData(data); //usre flow loads
 
         }).catch((err) => {
             console.log(err);
@@ -56,7 +56,7 @@ const UserProfileScreen = (props) => {
 
 
 
-    const logoutHandler = () => {
+    const logoutHandler = () => {  //user wants to logout 
         Alert.alert(
             "Çıkış",
             "Çıkış yapmak istediğinize emin misiniz?",
@@ -65,18 +65,18 @@ const UserProfileScreen = (props) => {
                     text: "İptal",
                     style: 'cancel',
                 },
-                { text: "Onayla", onPress: () => logout() },
-            ],
-            { cancelable: false },
+                { text: "Onayla", onPress: () => logout() },  //an alert pop and when pressed, user logout func called
+            ], 
+            { cancelable: false }, //when clicking the screen it does not allow to close the pop-up
         );
     }
 
 
-    const logout = async () => {
+    const logout = async () => {  
 
-        logoutUser().then((data) => {
-            removeValue('user').then(() => {
-                setTimeout(() => {
+        logoutUser().then((data) => {  //
+            removeValue('user').then(() => { //deletes the user object
+                setTimeout(() => {  //after 100 milisecond, application navigates to Auth Screen
                     props.navigation.navigate('AuthScreen');
                 },100)
             }).catch((err) => console.log("Hata", err))
@@ -96,19 +96,20 @@ const UserProfileScreen = (props) => {
 
 
         getUserFlowData();
-        // TODO 
+        // TODO - Future work
         // Add users liked post here
 
     }, []);
 
-    renderFlowItem = ({ item }) => (
+    renderFlowItem = ({ item }) => (   //it dşsplays the trash icon in the screen, in order to delete the post
         <Box flex={1} flexDirection="row">
             <Box flex={6}>
                 <FlowItem key={item} item={item} />
             </Box>
             <Box flex={0.8} justifyContent="center" alignItems="center" >
-                <TouchableOpacity onPress={() => deleteItemHandler(item.id)}>
+                <TouchableOpacity onPress={() => deleteItemHandler(item.id)}>  
                     <FontAwesome5 name="trash" color={AppColors.primary} size={20} />
+                    {/* after pressing the button  it deletes the post with item.id which is post.id */}
                 </TouchableOpacity>
             </Box>
         </Box>
@@ -123,18 +124,18 @@ const UserProfileScreen = (props) => {
                     text: "İptal",
                     style: 'cancel',
                 },
-                { text: "Onayla", onPress: () => deleteItem(postId) },
+                { text: "Onayla", onPress: () => deleteItem(postId) },  //an alert pops, if the button is pressed it calls the func to delete the post
             ],
-            { cancelable: false },
+            { cancelable: false },   //when clicking the screen it does not allow to close the pop-up
         );
     }
 
-    const deleteItem = (postId) => {
-        deletePost(postId).then((res) => {
+    const deleteItem = (postId) => { //gets the id from deleteItemHandler
+        deletePost(postId).then((res) => {  //deletes the post
             let data = res.data.data;
             console.log(data);
-            setUserSpinnerShow(true);
-            getUserFlowData()
+            setUserSpinnerShow(true);  //spins the spinnwe
+            getUserFlowData() //gets the updated flow data
 
         }).catch((err) => {
             console.log(err);
@@ -142,12 +143,12 @@ const UserProfileScreen = (props) => {
     }
 
 
-    const getUserFlowData = () => {
+    const getUserFlowData = () => {  //gets the user profile flow from API
         getUserFlow().then((res) => {
             let data = res.data.data;
 
-            setUserSpinnerShow(false);
-            setUserFlowData(data);
+            setUserSpinnerShow(false); //dpinner does not displays
+            setUserFlowData(data); 
 
         }).catch((err) => {
             console.log(err);
@@ -158,26 +159,26 @@ const UserProfileScreen = (props) => {
 
 
 
-    const updateUserProfileImage = (response) => {
-        const body = new FormData();
-        if (response?.uri) {
+    const updateUserProfileImage = (response) => {  //updating the profile picture
+        const body = new FormData();//let the HTTP know with different type of data will be send
+        if (response?.uri) { 
             let imageFile = {
-                uri: response.uri,
-                name: 'profile',
-                type: "image/png"
+                uri: response.uri, //new profile picture uri
+                name: 'profile', //name 
+                type: "image/png"  //type of the file 
             }
 
-            body.append('file', imageFile);
+            body.append('file', imageFile);  //new file append to the body
             setProfileImage(response.uri);
 
-            getJsonFromStorage('user').then((res) => {
+            getJsonFromStorage('user').then((res) => { //json comes from storage with asyncstorage library 
                 setJsonToStorage('user', {
                     ...res,
-                    profileImageUrl: response.uri
+                    profileImageUrl: response.uri //added the new profile image to the JSON object
                 })
             })
 
-            updateUserPicture(body).then((res) => {
+            updateUserPicture(body).then((res) => { //after changing the body API calls with user-service.js with axios
                 console.log("Veri", res.data.data);
             }).catch((err) => {
                 console.log("Hata", err);
@@ -195,7 +196,7 @@ const UserProfileScreen = (props) => {
                 <Box p={20} borderWidth="0.5" borderColor="#d2d2d2" >
 
                     <Box flexDirection="row" alignItems="center" >
-                        <TouchableOpacity onPress={() => launchImageLibrary(
+                        <TouchableOpacity onPress={() => launchImageLibrary(  //open the devices file directly
                             {
                                 mediaType: 'photo',
                                 includeBase64: false,
@@ -215,25 +216,29 @@ const UserProfileScreen = (props) => {
                                     height: "100%"
                                 }}
                                 source={profileImage ? { uri: profileImage } : require('../../assets/profilePlaceholder.png')} />
+                                  {/* if there is no profile picture, put the user icon as default */}
                         </TouchableOpacity>
 
                         <RegularText style={{ marginLeft: 10 }} >
-                            {user?.firstName + " " + user?.lastName}
+                            {user?.firstName + " " + user?.lastName}   
+                             {/* users first name and last name */}
                         </RegularText>
 
                         <Box flex={1} alignItems='flex-end'>
                             <TouchableOpacity onPress={logoutHandler}>
                                 <Feather name={"log-out"} size={30} color={'fe8791'} />
+                                {/* logout icon */}
                             </TouchableOpacity>
                         </Box>
                     </Box>
 
                     <RegularText color="gray" style={{ left: 60, }}>
-                        {user?.username}
+                        {user?.username} 
+                         {/* users usertitle name */}
                     </RegularText>
 
-
-                    <Box mt="3" flexDirection="row" justifyContent="space-around">
+                             {/* navigatition to followed screen from the profile screen */}
+                    <Box mt="3" flexDirection="row" justifyContent="space-around"> 
                         <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }} onPress={() => props.navigation.navigate('UserFollowedScreen')}>
                             <SimpleLineIcons name="user-following" color="black" size={20} />
                             <RegularText fontSize="12">
@@ -241,6 +246,7 @@ const UserProfileScreen = (props) => {
                         </RegularText>
                         </TouchableOpacity>
 
+                              {/* navigatition to users followers screen from the profile screen */}
                         <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }} onPress={() => props.navigation.navigate('UserFollowersScreen')}>
                             <SimpleLineIcons name="user-follow" color="black" size={20} />
                             <RegularText fontSize="14">
@@ -251,6 +257,7 @@ const UserProfileScreen = (props) => {
                     </Box>
 
 
+                      {/* navigatition to posts that user created section  and liked post section in the profile screen  */}
                     <SegmentedControl
                         activeFontStyle={styles.activeSegmentFontStyle}
                         style={styles.segmentStyle}
@@ -268,26 +275,27 @@ const UserProfileScreen = (props) => {
 
                 {
                     selectedIndex == 0 ?
-                        showUserPostSpinner ?
+                        showUserPostSpinner ? //display the spinner while loading the user posts
                             <Box flex={1} justifyContent="center" alignItems="center">
                                 <ActivityIndicator color="blue" />
                             </Box>
 
                             :
 
-                            (userFlowData?.posts) ?
-                                <FlatList
-                                    refreshing={refreshing}
-                                    onRefresh={refreshData}
+                            (userFlowData?.posts) ? //if there is user flow
+                                <FlatList // dispaly them inside the flatlist
+                                    refreshing={refreshing} 
+                                    onRefresh={refreshData} //refreshing the user flow
                                     showsVerticalScrollIndicator={false}
                                     showsHorizontalScrollIndicator={false}
                                     contentContainerStyle={{ paddingBottom: 100 }}
-                                    data={userFlowData.posts}
+                                    data={userFlowData.posts} 
                                     renderItem={renderFlowItem}
                                     keyExtractor={item => item.id}
                                 />
                                 :
-                                <Box alignItems="center" flex={1} justifyContent="center">
+                                // if there is no data
+                                <Box alignItems="center" flex={1} justifyContent="center"> 
                                     <RegularText>
                                         Veri Bulunamadı!
                                 </RegularText>
@@ -295,9 +303,10 @@ const UserProfileScreen = (props) => {
 
                         :
 
-                        <ScrollView>
+                        <ScrollView>   
+                              {/* TOD0 - no likes listed here*/}
                             <RegularText>
-                                Beğeni 1
+                                Beğeni sayısı : 1 
                         </RegularText>
                         </ScrollView>
                 }

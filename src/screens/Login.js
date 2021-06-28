@@ -8,40 +8,40 @@ import Feather from 'react-native-vector-icons/Feather';
 import { login } from '../services/auth-service';
 import { setJsonToStorage } from '../helpers/StorageHelper';
 
-import logoImage from '../../assets/postelly-logo.png';
+import logoImage from '../../assets/postelly-logo.png';  //  postelly-logo.png
 
 
 const LoginScreen = (props) => {
 
     const inputWidth = Dimensions.get('window').width * 0.9;
 
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");   //while user types the username, update the state
+    const [password, setPassword] = useState("");   //while user types the password, update the state
     const imageUri = Image.resolveAssetSource(logoImage).uri;
 
     const checkUserCredentials = () => {
-        let userCanNavigate = (username && password) || false;
+        let userCanNavigate = (username && password) || false; // if password and username does not match with database, no lnavigation to HomeScreen
 
         if (userCanNavigate) {
 
-            login(username, password).then((result) => {
-                let data = result.data.data;
-                let myData = {
+            login(username, password).then((result) => {  
+                let data = result.data.data;  //get the data from database
+                let myData = {  //specialize it, add the password to the data
                     ...data,
                     password: password
                 }
 
-                setJsonToStorage('user', myData).then(() => {
+                setJsonToStorage('user', myData).then(() => {  //write user information to storage
                     
-                    setTimeout(() => {
-                        props.navigation.navigate("HomeScreen", {
+                    setTimeout(() => {  //after the user logins successfully, run the inside code after 250 miliseconds
+                        props.navigation.navigate("HomeScreen", {  //navigate to HomeScreen
                             screen: 'HomeTab'
                         });
-                        setUsername("");
-                        setPassword("");
-                    }, 250)
-
-                }).catch((err) => Alert.alert("Hata", "Bir Hata Oluştu"))
+                        setUsername("");   //clear the username
+                        setPassword("");   //clear the password
+                    }, 250)   
+ 
+                }).catch((err) => Alert.alert("Hata", "Bir Hata Oluştu"))  //error while logging
                     .finally(() => {
                     })
 
@@ -50,7 +50,7 @@ const LoginScreen = (props) => {
                 Alert.alert("Uyarı", "Kullanıcı adı ya da  şifreniz yanlış!");
             })
         } else {
-            Alert.alert("Uyarı", "Bilgilerinizi Kontrol Ediniz, Boş Değer Bırakmayınız");
+            Alert.alert("Uyarı", "Bilgilerinizi Kontrol Ediniz, Boş Değer Bırakmayınız"); 
         }
     }
 
@@ -60,7 +60,7 @@ const LoginScreen = (props) => {
 
             <Image  source={{uri:imageUri}} 
             style={{margin:10, marginBottom:20, height:60, width:60}} />
-            <AppHeader showBottomBorder="true" />
+            <AppHeader showBottomBorder="true" />  
             </Box>
             <Box flex={7}>
                 <Box mt={30} p={10} flexDirection="row" justifyContent='center' alignItems='center'>
@@ -74,8 +74,8 @@ const LoginScreen = (props) => {
 
                 <Box mt={50} alignItems="center" flex={1}>
                     <TextInput
-                        autoCapitalize="none"
-                        onChangeText={(data) => setUsername(data)}
+                        autoCapitalize="none"   //no letter capitalization
+                        onChangeText={(data) => setUsername(data)}   //while user types the username updates the text in the input box 
                         placeholder="Kullanıcı Adı"
                         keyboardType="default"
                         placeholderTextColor='black'
@@ -93,9 +93,9 @@ const LoginScreen = (props) => {
                         }}
                     />
                     <TextInput
-                        secureTextEntry={true}
+                        secureTextEntry={true}    //password characters are secured with * character
                         autoCapitalize="none"
-                        onChangeText={(data) => setPassword(data)}
+                        onChangeText={(data) => setPassword(data)}   //while user types the password, update the text in the input box
                         placeholder="Şifre"
                         placeholderTextColor='black'
                         value={password}
@@ -112,8 +112,8 @@ const LoginScreen = (props) => {
                         }}
                     />
 
-                    <Box flex={1} justifyContent="flex-end" p={20} flexDirection="row" width="100%" >
-                        <TouchableOpacity onPress={() => checkUserCredentials()}
+                    <Box flex={1} justifyContent="flex-end" p={20} flexDirection="row" width="100%" >    
+                        <TouchableOpacity onPress={() => checkUserCredentials()}  //login touchable opacity icon button
                             style={{
                                 backgroundColor: AppColors.button,
                                 width: "30%",
@@ -133,17 +133,18 @@ const LoginScreen = (props) => {
 
                 </Box>
                 <Box flex={1} mt={50} p={10} width="100%" alignItems="center" justifyContent="center">
-                    <RegularText>
-                        Üye değil misin?
+                    <RegularText> 
+                        Üye değil misin?  
                         </RegularText>
-                    <TouchableOpacity onPress={() => props.navigation.navigate("RegisterScreen")}
+                    <TouchableOpacity onPress={() => props.navigation.navigate("RegisterScreen")}  //navigation to register screen
                         style={{
                             width: "30%",
                             height: 50,
                             justifyContent: 'center',
                             alignItems: 'center',
-                        }}>
-                        <MediumText color={AppColors.button} fontSize="15px">
+                        }}> 
+                        {/* button  */}
+                        <MediumText color={AppColors.button} fontSize="15px">  
                             Üye Ol
                             </MediumText>
 

@@ -3,26 +3,26 @@
  */
 
  /* user = {
-    "aboutText": "Kendi Halinde Bir adam",
+    "aboutText": "just another student",
     "city": "Antalya",
     "country": "Türkiye",
-    "email": "anil.korkmaz@mail.com",
+    "email": "duysal@mail.com",
     "enabled": true,
-    "firstName": "Anıl",
-    "gender": "Male",
+    "firstName": "Didem",
+    "gender": "Female",
     "id": 1,
-    "lastName": "Korkmaz",
+    "lastName": "Uysal",
     "profileImageId": null,
     "profileImageUrl": null,
-    "registeredDate": "2021-02-15T14:40:14.516",
-    "username": "anil"
+    "registeredDate": "2021-06-15T14:40:14.516",
+    "username": "didem"
 } */
 
 
 
  import AsyncStorage from "@react-native-async-storage/async-storage";
 
- // Get object value
+ //  The JSON objects requests from the storage
  const getJsonFromStorage = async (key) => {
      try {
          const jsonValue = await AsyncStorage.getItem(key)
@@ -32,6 +32,8 @@
      }
  }
 
+
+ //for API security, basic auth configuration with inceptor
  const getUserConfig = async () => {
     try {
         const jsonValue = await AsyncStorage.getItem('user')
@@ -48,7 +50,7 @@
  }
  
  
- // Set object value
+ // When the user uses the app first time the info needs to stored
  const setJsonToStorage = async (key,value) => {
      try {
          const jsonValue = JSON.stringify(value)
@@ -58,6 +60,7 @@
      }
  }
  
+ //setting data to storage
  const setDataToStorage = async (key,value) => {
      try {
          await AsyncStorage.setItem(key, value)        
@@ -66,6 +69,7 @@
      }
  }
  
+ //data getting from storage
  const getDataFromStorage = async (key) => {
      try {
          const value = await AsyncStorage.getItem(key)
@@ -74,10 +78,10 @@
          // error reading value
      }
  
-     return "canberk";
+     return "didem";
  }
  
- 
+ //remove a value from storage 
  const removeValue = async (key) => {
      try {
          const removeAction = await AsyncStorage.removeItem(key)

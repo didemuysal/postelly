@@ -18,11 +18,11 @@ const Stack = createStackNavigator();
 
 function AppRoutes() {
     return (
-        <Stack.Navigator>
-
+        <Stack.Navigator>  
+{/* // Stack navigator for user routes */}
             <Stack.Screen
                 name="IndicatorScreen"
-                component={IndicatorScreen}
+                component={IndicatorScreen}  // route to HomeScreen or AuthRoute
                 options={{
                     headerShown: false
                 }}
@@ -30,7 +30,7 @@ function AppRoutes() {
 
             <Stack.Screen
                 name="AuthScreen"
-                component={AuthScreenRoutes}
+                component={AuthScreenRoutes}  // Auth route AuthRoues.js for Login or registration
                 options={{
                     headerShown: false
                 }}
@@ -38,7 +38,7 @@ function AppRoutes() {
 
             <Stack.Screen
                 name="HomeScreen"
-                component={HomeScreenRoutes}
+                component={HomeScreenRoutes}  // In-app navigation route HomeScreenRoutes.js - home-search-profile
                 options={{
                     headerShown: false
                 }}
@@ -46,7 +46,7 @@ function AppRoutes() {
 
             <Stack.Screen
                 name="UserFollowersScreen"
-                component={UserFollowersScreen}
+                component={UserFollowersScreen} // in UserProfileScreen - Followers Screen
                 title="Hello"
                 
 
@@ -58,7 +58,7 @@ function AppRoutes() {
             />
             <Stack.Screen
                 name="UserFollowedScreen"
-                component={UserFollowedScreen}
+                component={UserFollowedScreen}  //in UserProfileScreen - Followed Users Screen
                 
                 options={{ 
                     headerBackTitleVisible: false,
@@ -75,7 +75,7 @@ function AppRoutes() {
 
 
 
-export default class AppNavigation extends React.Component {
+export default class  AppNavigation extends React.Component {
 
     constructor(props) {
         super(props);
@@ -86,7 +86,7 @@ export default class AppNavigation extends React.Component {
     render() {
         return (
             <NavigationContainer ref={navigationRef}>
-                <AppRoutes />
+                <AppRoutes/>
             </NavigationContainer>
         );
     }

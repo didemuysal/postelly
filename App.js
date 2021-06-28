@@ -5,7 +5,7 @@
  * @format
  * @flow strict-local
  */
-
+// needed libraries imported
 import React from 'react';
 import {
   LogBox,
@@ -34,7 +34,8 @@ const App = () => {
   },[])
 
   return (
-    <PaperProvider>
+     //TAB
+    <PaperProvider>  
       <SafeAreaView style={{ flex: 1, backgroundColor: AppColors.background }}>
         <StatusBar
           backgroundColor="#F4F7F8"
